@@ -1,0 +1,14 @@
+# example
+
+## Section
+
+```elixir
+  defmodule Examples do
+    @greeting "hello"
+    def greeting(name) do
+     ~s(#{@greeting} #{name})
+    end
+  end
+IO.puts Examples.greeting("sai")
+
+```
