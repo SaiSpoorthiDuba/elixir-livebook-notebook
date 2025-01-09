@@ -1,6 +1,36 @@
 # example
 
-## Section
+## Intro to Elixir
+
+Elixir is a functional and dynamic programming language that runs on the Erlang VM:
+
+```elixir
+List = ["hello", 123, :atom]
+```
+
+Elixir data structures are immutable by default:
+
+```elixir
+List.delete(list,123)
+```
+
+```elixir
+List
+```
+
+Elixir supports pattern-matching, polymorphism via prorocols, meta-programming, and more. But today we will focus on concurency features. In the Erlang VM, all code runs inside lightweight threads called processes. We can literally create millions of them:
+
+```elixir
+for _ <- 1..1_000_000 do 
+   spawn(fn -> :ok end)
+end
+```
+
+process communicate by sending messages between them:
+
+<!-- livebook:{"break_markdown":true} -->
+
+MODULES
 
 ```elixir
   defmodule Examples do
@@ -10,5 +40,129 @@
     end
   end
 IO.puts Examples.greeting("sai")
+
+```
+
+Pattern Matching
+
+```elixir
+x=1
+1=x
+IO.puts(x)
+```
+
+```elixir
+list =[1,2,3]
+IO.inspect(list)
+```
+
+```elixir
+[1,2,3]= list
+IO.inspect(list)
+```
+
+```elixir
+ list =[1,2,3]
+ IO.inspect(list)
+```
+
+```elixir
+ [1 | tail ] = list
+ IO.inspect(tail)
+```
+
+Anonymous Functions
+
+```elixir
+adder =  fn a,b -> a+b end
+IO.puts(adder.(1,2))
+IO.puts(adder.(3,5))
+```
+
+```elixir
+substrac = fn a,b -> a-b end
+IO.puts(substrac.(5,3))
+```
+
+```elixir
+product =  fn a,b -> a*b end
+IO.puts(product.(5,5))
+```
+
+using case example
+
+```elixir
+ defmodule Vote do
+    def eligible(age) do
+      if age >= 18 do
+        {:ok, age}
+      else
+        {:error, "underage"}
+      end
+    end
+  end
+
+  input = 18
+  case Vote.eligible(input) do
+    {:ok, age} ->
+      IO.puts("Eligible for vote: #{inspect(age)}")
+
+    {:error, reason} ->
+      IO.puts("Not eligible for vote: #{inspect(reason)}")
+  end
+```
+
+```elixir
+#input = "2025-01-07"
+  input = "2025-02-31"
+
+  case Date.from_iso8601(input) do
+    {:ok, date} ->
+        IO.puts("we gote a valid date: #{inspect(date)}")
+
+        {:error, reason} ->
+            IO.puts("the date is invalid. Reason: #{inspect(reason)}")
+        end
+
+```
+
+patter match on maps
+
+```elixir
+map = %{:elixir => :functional, :python => :object_oriented}
+%{:elixir => type} = map
+IO.puts(type)
+
+%{:python => typee} = map
+IO.puts(typee)
+
+%{:c => types} = map
+IO.puts(types)
+
+```
+
+example 2
+
+```elixir
+map1 = %{:english => 89, :maths => 98, :social => 75}
+%{:maths => typem} = map1
+IO.puts(typem)
+
+```
+
+```elixir
+{:ok, agent} = Agent.start_link(fn -> [] end)
+IO.inspect(agent) #output is PID that means process identifier
+
+ agnt = Agent.get(agent, fn list -> list end)
+IO.inspect(agnt)
+
+Agent.update(agent, fn list -> [0 | list] end )
+newagent = Agent.get(agent, fn list -> list end)
+IO.inspect(newagent)
+
+Agent.update(agent, fn list -> [1 | list] end )
+newagents = Agent.get(agent, fn list -> list end)
+IO.inspect(newagents)
 
 ```
