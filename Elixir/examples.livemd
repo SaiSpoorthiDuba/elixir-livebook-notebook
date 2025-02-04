@@ -129,15 +129,15 @@ using case example
 patter match on maps
 
 ```elixir
-map = %{:elixir => :functional, :python => :object_oriented}
-%{:elixir => type} = map
-IO.puts(type)
+#map = %{:elixir => :functional, :python => :object_oriented}
+#%{:elixir => type} = map
+#IO.puts(type)
 
-%{:python => typee} = map
-IO.puts(typee)
+#%{:python => typee} = map
+#IO.puts(typee)
 
-%{:c => types} = map
-IO.puts(types)
+#%{:c => types} = map
+#IO.puts(types)
 
 ```
 
@@ -164,5 +164,145 @@ IO.inspect(newagent)
 Agent.update(agent, fn list -> [1 | list] end )
 newagents = Agent.get(agent, fn list -> list end)
 IO.inspect(newagents)
+
+```
+
+```elixir
+System.cmd("mix", ["new", "elixir"])
+
+```
+
+Comprehensions
+
+<!-- livebook:{"break_markdown":true} -->
+
+The first thing we notice is the use of for and a generator. What is a generator? Generators are the x <- [1, 2, 3, 4] expressions found in list comprehensions. They’re responsible for generating the next value.
+
+```elixir
+list = [1, 2, 3, 4, 5]
+for x <- list, do: x*x
+
+```
+
+```elixir
+for {_key, val} <- [one: 1, two: 2, three: 3], do: val
+```
+
+```elixir
+list = [1, 2, 3, 4]
+for n <- list, times <- 1..n do
+  String.duplicate("*", times)
+end
+
+```
+
+```elixir
+for {k, v} <- [one: 1, two: 2, three: 3], into: %{}, do: {k, v}
+
+```
+
+```elixir
+for c <- [72, 101, 108, 108, 111], into: "", do: <<c>>
+```
+
+```elixir
+list = [1,2,3,4,5]
+for x <- list, do: x*x
+```
+
+```elixir
+#Keyword Lists
+for {_key, val} <- [one: 1, two: 2, three: 3], do: val 
+```
+
+```elixir
+#Maps
+for {k,v} <- %{"a" => "A", "b" => "B" ,"c" => "C"}, do: {k,v}
+```
+
+```elixir
+#Binaries
+for <<c <- "hello">>, do: <<c>>
+```
+
+```elixir
+for {:ok, val} <- [ok: "Hello", error: "unknown" , ok: "world"], do: val
+```
+
+```elixir
+list = [1,2,3,4]
+for n <- list, times <- 1..n do String.duplicate("*", times) end
+#for n <- list, times <-1..n, do: IO.puts "#{n} - #{times}"
+```
+
+Filters
+
+```elixir
+import Integer
+for x <- 1..10, is_even(x), do: x
+```
+
+```elixir
+import Integer
+for x <- 1..100, is_even(x), rem(x,3) == 0, do: x 
+```
+
+```elixir
+import  Integer
+for x <- 1..100, is_odd(x), rem(x,3) == 0, do: x
+```
+
+```elixir
+for {k, v} <- [one: 1, two: 2, three: 3] , into: %{} , do: {k,v}
+```
+
+```elixir
+for {k, v} <- %{one: 1, two: 2, three: 3} , into: [] , do: {k, v}
+```
+
+```elixir
+for c <- [72, 101, 108, 108, 111], into: "" ,do: <<c>>
+```
+
+Strings
+
+```elixir
+string = <<104,101,108,108,111>>
+
+string <> <<0>>
+```
+
+Charlists
+
+```elixir
+'hełło'
+```
+
+```elixir
+"hełło" <> <<0>>
+
+```
+
+```elixir
+?S
+```
+
+```elixir
+Time.utc_now
+
+```
+
+```elixir
+defmodule Example do
+  def timed(fun, args) do
+    {time, result} = :timer.tc(fun, args)
+    IO.puts("Time: #{time} μs")
+    IO.puts("Result: #{result}")
+  end
+end
+Example.timed(fn (n) -> (n * n) * n end, [100])
+```
+
+```elixir
 
 ```
